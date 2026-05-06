@@ -1,0 +1,62 @@
+﻿@model DernekSitesi.Models.YonetimUyesi
+@{
+    ViewData["Title"] = "Yeni Yönetici Ekle";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card border-0 shadow-lg rounded-5 mx-auto" style="max-width: 800px;">
+        <div class="card-header text-white p-4 text-center" style="background-color: #0b2b26;">
+            <h3 class="fw-bold mb-0"><i class="fa-solid fa-user-tie me-2"></i>Yeni Yönetim Kurulu Üyesi</h3>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label asp-for="AdSoyad" class="form-label fw-bold">Ad Soyad</label>
+                        <input asp-for="AdSoyad" class="form-control form-control-lg bg-light" placeholder="Örn: Polat Alemdar" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Gorev" class="form-label fw-bold">Görevi / Unvanı</label>
+                        <input asp-for="Gorev" class="form-control form-control-lg bg-light" placeholder="Örn: Dernek Başkanı" required />
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold"><i class="fa-solid fa-camera text-warning me-2"></i>Profil Fotoğrafı</label>
+                        <input type="file" name="resimDosyasi" class="form-control form-control-lg bg-light" accept="image/*" required />
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Ozgecmis" class="form-label fw-bold"><i class="fa-solid fa-pen-nib text-primary me-2"></i>Özgeçmiş / Hakkında</label>
+                        <textarea asp-for="Ozgecmis" class="form-control bg-light" rows="4" placeholder="Üyenin hayat hikayesi, vizyonu veya dernekteki hedefleri..."></textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="TwitterLink" class="form-label fw-bold"><i class="fa-brands fa-twitter text-info me-1"></i>Twitter</label>
+                        <input asp-for="TwitterLink" class="form-control bg-light" placeholder="Link (Opsiyonel)" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="LinkedInLink" class="form-label fw-bold"><i class="fa-brands fa-linkedin text-primary me-1"></i>LinkedIn</label>
+                        <input asp-for="LinkedInLink" class="form-control bg-light" placeholder="Link (Opsiyonel)" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="InstagramLink" class="form-label fw-bold"><i class="fa-brands fa-instagram text-danger me-1"></i>Instagram</label>
+                        <input asp-for="InstagramLink" class="form-control bg-light" placeholder="Link (Opsiyonel)" />
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <label asp-for="Siralama" class="form-label fw-bold">Gösterim Sırası</label>
+                        <input asp-for="Siralama" class="form-control form-control-lg bg-light" type="number" value="1" required />
+                        <small class="text-muted fw-bold d-block mt-1">Başkan için 1, Başkan Yrd. için 2 gibi numaralar verin ki sitede o sırayla dizilsinler.</small>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-5">
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">İptal</a>
+                    <button type="submit" class="btn btn-success rounded-pill px-5 fw-bold shadow-sm" style="background-color: #00b894; border:none;"><i class="fa-solid fa-check me-2"></i>Kaydet ve Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+﻿@model DernekSitesi.Models.YonetimUyesi
+@{
+    ViewData["Title"] = "Yönetici Düzenle";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card border-0 shadow-lg rounded-5 mx-auto" style="max-width: 800px;">
+        <div class="card-header text-white p-4 text-center" style="background-color: #0984e3;">
+            <h3 class="fw-bold mb-0"><i class="fa-solid fa-user-pen me-2"></i>Yönetici Bilgilerini Güncelle</h3>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ResimYolu" />
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label asp-for="AdSoyad" class="form-label fw-bold">Ad Soyad</label>
+                        <input asp-for="AdSoyad" class="form-control form-control-lg bg-light" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Gorev" class="form-label fw-bold">Görevi / Unvanı</label>
+                        <input asp-for="Gorev" class="form-control form-control-lg bg-light" required />
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold d-block"><i class="fa-solid fa-camera text-warning me-2"></i>Yeni Fotoğraf (Opsiyonel)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            @if (!string.IsNullOrEmpty(Model.ResimYolu))
+                            {
+                                <img src="@Model.ResimYolu" class="rounded-circle object-fit-cover shadow-sm border" style="width: 60px; height: 60px;" alt="Mevcut Fotoğraf" />
+                            }
+                            <div class="flex-grow-1">
+                                <input type="file" name="resimDosyasi" class="form-control form-control-lg bg-light" accept="image/*" />
+                                <small class="text-muted fw-bold">Not: Sadece fotoğrafı değiştirmek isterseniz yeni dosya seçin. Boş bırakırsanız mevcut fotoğrafınız korunur.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Ozgecmis" class="form-label fw-bold"><i class="fa-solid fa-pen-nib text-primary me-2"></i>Özgeçmiş / Hakkında</label>
+                        <textarea asp-for="Ozgecmis" class="form-control bg-light" rows="4"></textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="TwitterLink" class="form-label fw-bold"><i class="fa-brands fa-twitter text-info me-1"></i>Twitter</label>
+                        <input asp-for="TwitterLink" class="form-control bg-light" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="LinkedInLink" class="form-label fw-bold"><i class="fa-brands fa-linkedin text-primary me-1"></i>LinkedIn</label>
+                        <input asp-for="LinkedInLink" class="form-control bg-light" />
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="InstagramLink" class="form-label fw-bold"><i class="fa-brands fa-instagram text-danger me-1"></i>Instagram</label>
+                        <input asp-for="InstagramLink" class="form-control bg-light" />
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <label asp-for="Siralama" class="form-label fw-bold">Gösterim Sırası</label>
+                        <input asp-for="Siralama" class="form-control form-control-lg bg-light" type="number" required />
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-5">
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">İptal</a>
+                    <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" style="background-color: #0984e3; border:none;"><i class="fa-solid fa-arrows-rotate me-2"></i>Değişiklikleri Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

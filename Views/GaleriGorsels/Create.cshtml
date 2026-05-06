@@ -1,0 +1,60 @@
+﻿@model DernekSitesi.Models.GaleriGorsel
+@{
+    ViewData["Title"] = "Yeni Albüm Ekle";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card border-0 shadow-lg rounded-5 mx-auto" style="max-width: 700px;">
+        <div class="card-header text-white p-4 text-center" style="background-color: #9b59b6;">
+            <h3 class="fw-bold mb-0"><i class="fa-solid fa-images me-2"></i>Yeni Etkinlik Albümü Ekle</h3>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-4">
+                    <label asp-for="Baslik" class="form-label fw-bold">Etkinlik/Albüm Başlığı</label>
+                    <input asp-for="Baslik" class="form-control form-control-lg bg-light" placeholder="Örn: 2026 Galatasaray Buluşması" required />
+                </div>
+
+                <div class="mb-4 p-4 rounded-4" style="background-color: #f8f9fa; border: 2px dashed #ced4da;">
+                    <label class="form-label fw-bold text-dark"><i class="fa-solid fa-image text-primary me-2"></i>1. Vitrin (Kapak) Görseli</label>
+                    <input type="file" name="resimDosyasi" class="form-control form-control-lg" accept="image/*" required />
+                    <small class="text-muted mt-2 d-block">Ana sayfada ve galeri listesinde ilk bu fotoğraf görünecek.</small>
+                </div>
+
+                <div class="mb-5 p-4 rounded-4" style="background-color: rgba(155, 89, 182, 0.05); border: 2px dashed #9b59b6;">
+                    <label class="form-label fw-bold" style="color: #9b59b6;"><i class="fa-solid fa-layer-group me-2"></i>2. Etkinlik Fotoğrafları (Çoklu Seçim)</label>
+
+                    <input type="file" id="cokluResimSecici" name="cokluDosyalar" class="form-control form-control-lg" accept="image/*" multiple="multiple" />
+
+                    <h5 id="secimBilgisi" class="text-success mt-3 fw-bold" style="display:none;"></h5>
+
+                    <small class="text-muted mt-2 d-block fw-bold"><i class="fa-solid fa-lightbulb text-warning me-1"></i>İPUCU: Açılan pencerede farenizin sol tuşuna basılı tutup sürükleyerek veya klavyeden CTRL tuşuna basılı tutarak aynı anda onlarca fotoğraf seçebilirsiniz.</small>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">İptal</a>
+                    <button type="submit" class="btn text-white rounded-pill px-5 fw-bold shadow-sm" style="background-color: #9b59b6;">Albümü Oluştur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Kullanıcı resimleri seçtiğinde anında kaç tane seçtiğini ekrana yazdıran ufak sihir
+        document.getElementById('cokluResimSecici').addEventListener('change', function(e) {
+            var dosyaSayisi = e.target.files.length;
+            var bilgiAlani = document.getElementById('secimBilgisi');
+
+            if(dosyaSayisi > 0) {
+                bilgiAlani.style.display = 'block';
+                bilgiAlani.innerHTML = '<i class="fa-solid fa-check-circle me-1"></i> Harika! Tam ' + dosyaSayisi + ' adet etkinlik fotoğrafı seçildi.';
+            } else {
+                bilgiAlani.style.display = 'none';
+            }
+        });
+    </script>
+}

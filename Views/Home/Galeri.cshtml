@@ -1,0 +1,210 @@
+﻿@model IEnumerable<DernekSitesi.Models.GaleriGorsel>
+
+@{
+    ViewData["Title"] = "Etkinlik Galerisi";
+}
+
+<style>
+    /* Ana Galeri Kartı Stilleri */
+    .gallery-item {
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        cursor: pointer;
+        position: relative;
+    }
+
+    .gallery-img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .gallery-item:hover .gallery-img {
+        transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(11, 43, 38, 0.9), transparent);
+        padding: 20px;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+    }
+
+    /* Modal (Açılır Pencere) İçindeki Küçük Fotoğraflar (Thumbnail) Stili */
+    .modal-content {
+        border-radius: 20px;
+        overflow: hidden;
+        border: none;
+        background-color: #1a1a1a; /* Sinema modu arka plan */
+    }
+
+    .grid-thumbnail {
+        height: 150px;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+        .grid-thumbnail:hover {
+            transform: scale(1.05);
+            border-color: #f39c12; /* Üzerine gelince sarı çerçeve */
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+        }
+
+    /* Slider Resmi Stili */
+    .carousel-item img {
+        height: 65vh;
+        object-fit: contain;
+        background-color: #1a1a1a;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+</style>
+
+<div class="container mt-5 mb-5">
+    <div class="text-center mb-5 p-5 rounded-5 shadow-sm text-white" style="background: linear-gradient(135deg, #0b2b26 0%, #1a4a40 100%);">
+        <i class="fa-solid fa-camera-retro fa-4x mb-3 text-warning"></i>
+        <h1 class="display-5 fw-bold mb-2">Etkinlik Galerimiz</h1>
+        <p class="lead opacity-75 mb-0">Derneğimizin faaliyetlerinden ve dayanışma günlerimizden kareler.</p>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#albumModal-@item.Id">
+
+                        <img src="@item.ResimYolu" class="gallery-img" alt="@item.Baslik">
+
+                        <div class="gallery-overlay">
+                            <h5 class="fw-bold mb-0">@item.Baslik</h5>
+                            <small><i class="fa-regular fa-calendar-days me-1"></i>@item.EklenmeTarihi.ToString("dd MMMM yyyy")</small>
+                            <span class="badge bg-warning text-dark mt-2 d-block w-50 rounded-pill shadow-sm"><i class="fa-solid fa-layer-group me-1"></i>Tümünü Gör</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="albumModal-@item.Id" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content shadow-lg">
+
+                            <div class="modal-header bg-dark text-white p-4">
+                                <h4 class="modal-title fw-bold text-warning"><i class="fa-solid fa-images me-2"></i>@item.Baslik</h4>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                            </div>
+
+                            <div class="modal-body p-4 bg-dark">
+
+                                <div id="grid-view-@item.Id" class="row g-3">
+                                    <div class="col-6 col-md-3">
+                                        <img src="@item.ResimYolu" class="grid-thumbnail" onclick="openSlide(@item.Id, 0)" alt="Kapak">
+                                    </div>
+
+                                    @if (!string.IsNullOrEmpty(item.CokluFotograflar))
+                                    {
+                                        var fotolar = item.CokluFotograflar.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                                        int index = 1; // Kapak 0'dı, diğerleri 1'den başlar
+                                        foreach (var foto in fotolar)
+                                        {
+                                            <div class="col-6 col-md-3">
+                                                <img src="@foto" class="grid-thumbnail" onclick="openSlide(@item.Id, @index)" alt="Etkinlik Karesi">
+                                            </div>
+                                            index++;
+                                        }
+                                    }
+                                </div>
+
+                                <div id="slider-view-@item.Id" style="display: none;">
+
+                                    <button type="button" class="btn btn-outline-light mb-3 rounded-pill fw-bold px-4" onclick="showGrid(@item.Id)">
+                                        <i class="fa-solid fa-arrow-left me-2"></i>Fotoğraf Listesine Dön
+                                    </button>
+
+                                    <div id="carousel-@item.Id" class="carousel slide" data-bs-ride="false">
+                                        <div class="carousel-inner rounded-4 overflow-hidden">
+
+                                            <div class="carousel-item active">
+                                                <img src="@item.ResimYolu" class="d-block w-100" alt="Kapak">
+                                            </div>
+
+                                            @if (!string.IsNullOrEmpty(item.CokluFotograflar))
+                                            {
+                                                var fotolar = item.CokluFotograflar.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                                                foreach (var foto in fotolar)
+                                                {
+                                                    <div class="carousel-item">
+                                                        <img src="@foto" class="d-block w-100" alt="Kare">
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+
+                                        @if (!string.IsNullOrEmpty(item.CokluFotograflar))
+                                        {
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@item.Id" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true" style="width: 3rem; height: 3rem;"></span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carousel-@item.Id" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true" style="width: 3rem; height: 3rem;"></span>
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center p-5 bg-light rounded-5 border">
+            <i class="fa-regular fa-images fa-4x text-muted mb-3 opacity-50"></i>
+            <h3 class="fw-bold text-dark">Galeri Şu An Boş</h3>
+            <p class="text-muted">Yakında derneğimizin en güzel anılarını burada paylaşacağız.</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Seçilen fotoğrafa tıklandığında Slider'ı o fotoğraftan başlatan zeki fonksiyon
+        function openSlide(albumId, slideIndex) {
+            // 1. Grid (Izgara) görünümünü kapat
+            document.getElementById('grid-view-' + albumId).style.display = 'none';
+            // 2. Slider görünümünü aç
+            document.getElementById('slider-view-' + albumId).style.display = 'block';
+
+            // 3. Tıklanan fotoğrafın sırasını (index) Slider'a bildir ve ona git
+            var myCarouselEl = document.getElementById('carousel-' + albumId);
+            var carousel = bootstrap.Carousel.getOrCreateInstance(myCarouselEl);
+            carousel.to(slideIndex);
+        }
+
+        // Listeye dönmek istendiğinde Slider'ı kapatıp Grid'i açan fonksiyon
+        function showGrid(albumId) {
+            document.getElementById('slider-view-' + albumId).style.display = 'none';
+            document.getElementById('grid-view-' + albumId).style.display = 'flex';
+        }
+    </script>
+}

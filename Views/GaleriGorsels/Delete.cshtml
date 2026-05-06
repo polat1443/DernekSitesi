@@ -1,0 +1,37 @@
+﻿@model DernekSitesi.Models.GaleriGorsel
+@{
+    ViewData["Title"] = "Albümü Sil";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card border-0 shadow-lg rounded-5 mx-auto overflow-hidden" style="max-width: 600px;">
+
+        <div class="card-header bg-danger text-white p-4 text-center">
+            <h3 class="fw-bold mb-0"><i class="fa-solid fa-triangle-exclamation me-2"></i>Silme İşlemi Onayı</h3>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ResimYolu))
+        {
+            <img src="@Model.ResimYolu" class="w-100" style="height: 250px; object-fit: cover;" alt="Kapak" />
+        }
+
+        <div class="card-body p-5 text-center">
+            <h4 class="fw-bold text-dark mb-3">@Model.Baslik</h4>
+            <p class="text-muted mb-4 fs-5">Bu albümü ve içindeki tüm etkinlik fotoğraflarını kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.</p>
+
+            <div class="bg-light p-3 rounded-4 d-inline-block mb-4 border">
+                <span class="fw-bold text-dark"><i class="fa-regular fa-calendar-days text-primary me-2"></i>Eklenme Tarihi:</span> @Model.EklenmeTarihi.ToString("dd MMMM yyyy")
+            </div>
+
+            <form asp-action="Delete" class="mt-2">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-center gap-3">
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-5 py-2 fw-bold">Vazgeç</a>
+                    <button type="submit" class="btn btn-danger rounded-pill px-5 py-2 fw-bold shadow-sm">
+                        <i class="fa-solid fa-trash me-2"></i>Evet, Kalıcı Olarak Sil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

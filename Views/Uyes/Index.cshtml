@@ -1,0 +1,96 @@
+﻿@model IEnumerable<DernekSitesi.Models.Uye>
+@{
+    ViewData["Title"] = "Üye Listesi";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white rounded-4 shadow-sm border" style="border-color: #f1f2f6 !important;">
+        <div class="d-flex align-items-center">
+            <div class="p-3 rounded-circle me-3" style="background: rgba(0, 184, 148, 0.15); color: #00b894;">
+                <i class="fa-solid fa-id-card-clip fa-2x"></i>
+            </div>
+            <div>
+                <h2 class="fw-bold mb-0 text-dark">Üye Yönetimi</h2>
+                <p class="text-muted mb-0">Derneğinize kayıtlı tüm üyeleri buradan yönetebilirsiniz.</p>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-action="ExcelIndir" class="btn text-white fw-bold px-4 py-2 rounded-pill shadow-sm" style="background-color: #10ac84; border:none;" title="Listeyi Excel olarak indir">
+                <i class="fa-solid fa-file-excel me-2"></i>Excel'e Aktar
+            </a>
+            <a asp-action="Create" class="btn btn-success fw-bold px-4 py-2 rounded-pill shadow-sm" style="background-color: #00b894; border:none;">
+                <i class="fa-solid fa-plus me-2"></i>Yeni Üye Ekle
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="text-white" style="background-color: #2d3436;">
+                    <tr>
+                        <th class="py-3 ps-4">ÜYE BİLGİSİ</th>
+                        <th>KAN GRUBU</th>
+                        <th>DURUM</th>
+                        <th class="text-end pe-4">İŞLEMLER</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    @if (Model == null || !Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">
+                                <i class="fa-solid fa-users-slash fa-3x mb-3 opacity-50"></i>
+                                <h5>Sistemde henüz kayıtlı üye bulunmuyor.</h5>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-dark">
+                                    <div class="d-flex align-items-center">
+                                        @if (!string.IsNullOrEmpty(item.ProfilFotografi))
+                                        {
+                                            <img src="@item.ProfilFotografi" class="rounded-circle me-3 shadow-sm border" style="width: 45px; height: 45px; object-fit: cover;" alt="@item.AdSoyad" />
+                                        }
+                                        else
+                                        {
+                                            <div class="rounded-circle me-3 shadow-sm border d-flex align-items-center justify-content-center bg-light" style="width: 45px; height: 45px;">
+                                                <i class="fa-solid fa-user text-success"></i>
+                                            </div>
+                                        }
+                                        <span>@item.AdSoyad</span>
+                                    </div>
+                                </td>
+                                <td class="text-muted">
+                                    <i class="fa-solid fa-droplet text-danger me-1"></i> @item.KanGrubu
+                                </td>
+                                <td>
+                                    @if (item.AktifMi)
+                                    {
+                                        <span class="badge bg-success shadow-sm">Aktif Üye</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary shadow-sm">Pasif</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group shadow-sm rounded-pill" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success px-3" style="background-color: #00b894; border:none;" title="Düzenle"><i class="fa-solid fa-pen"></i></a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white px-3" title="Detay"><i class="fa-solid fa-circle-info"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger px-3" title="Sil"><i class="fa-solid fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

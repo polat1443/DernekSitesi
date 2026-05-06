@@ -1,0 +1,130 @@
+﻿@model IEnumerable<DernekSitesi.Models.Mesaj>
+@{
+    ViewData["Title"] = "Gelen Kutusu";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white rounded-4 shadow-sm border" style="border-color: #f1f2f6 !important;">
+        <div class="d-flex align-items-center">
+            <div class="p-3 rounded-circle me-3" style="background: rgba(214, 48, 49, 0.15); color: #d63031;">
+                <i class="fa-solid fa-inbox fa-2x"></i>
+            </div>
+            <div>
+                <h2 class="fw-bold mb-0 text-dark">Gelen Kutusu</h2>
+                <p class="text-muted mb-0">Ziyaretçilerden gelen mesajları buradan takip edebilirsiniz.</p>
+            </div>
+        </div>
+        <a href="/Admin/Index" class="btn btn-light fw-bold px-4 py-2 rounded-pill shadow-sm">
+            <i class="fa-solid fa-arrow-left me-2"></i>Panele Dön
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="text-white" style="background-color: #2d3436;">
+                    <tr>
+                        <th class="py-3 ps-4">GÖNDEREN</th>
+                        <th>KONU</th>
+                        <th>TARİH</th>
+                        <th>DURUM</th>
+                        <th class="text-end pe-4">İŞLEM</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    @if (Model == null || !Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="fa-regular fa-envelope-open fa-3x mb-3 opacity-50"></i>
+                                <h5>Gelen kutunuz şu an boş.</h5>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var mesaj in Model)
+                        {
+                            <tr style="@(!mesaj.OkunduMu ? "background-color: #f8f9fa; font-weight: bold;" : "")">
+                                <td class="ps-4">
+                                    <div class="d-flex flex-column">
+                                        <span class="text-dark">@mesaj.AdSoyad</span>
+                                        <small class="text-muted">@mesaj.Email</small>
+                                    </div>
+                                </td>
+                                <td><span class="text-dark">@mesaj.Konu</span></td>
+                                <td><span class="badge bg-light text-dark border"><i class="fa-regular fa-clock me-1"></i>@mesaj.GonderimTarihi.ToString("dd.MM.yyyy HH:mm")</span></td>
+                                <td>
+                                    @if (!mesaj.OkunduMu)
+                                    {
+                                        <span class="badge bg-danger shadow-sm">Yeni Mesaj</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="badge bg-success shadow-sm">Okundu</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-outline-primary rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#mesajPenceresi-@mesaj.Id">
+                                        Mesajı Oku
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <div class="modal fade" id="mesajPenceresi-@mesaj.Id" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content rounded-4 border-0 shadow-lg">
+
+                                        <div class="modal-header border-0 bg-light p-4 rounded-top-4">
+                                            <h5 class="modal-title fw-bold text-dark">
+                                                <i class="fa-regular fa-envelope-open text-primary me-2"></i>Mesaj Detayı
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                                        </div>
+
+                                        <div class="modal-body p-4">
+                                            <div class="row mb-4">
+                                                <div class="col-md-6">
+                                                    <small class="text-muted fw-bold d-block mb-1">KİMDEN</small>
+                                                    <h5 class="fw-bold mb-0 text-dark">@mesaj.AdSoyad</h5>
+                                                    <a href="mailto:@mesaj.Email" class="text-primary text-decoration-none">@mesaj.Email</a>
+                                                </div>
+                                                <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                                                    <small class="text-muted fw-bold d-block mb-1">GÖNDERİM TARİHİ</small>
+                                                    <p class="mb-0 text-dark">@mesaj.GonderimTarihi.ToString("dd MMMM yyyy, HH:mm")</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="bg-light p-3 rounded-3 mb-4 border" style="border-color: #e9ecef !important;">
+                                                <small class="text-muted fw-bold d-block mb-1">KONU</small>
+                                                <h6 class="mb-0 fw-bold text-dark">@mesaj.Konu</h6>
+                                            </div>
+
+                                            <div>
+                                                <small class="text-muted fw-bold d-block mb-2">MESAJ İÇERİĞİ</small>
+                                                <p class="text-dark" style="white-space: pre-wrap; line-height: 1.8; font-size: 1.05rem;">@mesaj.Icerik</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer border-0 p-4 bg-light rounded-bottom-4">
+                                            <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Kapat</button>
+
+                                            @if (!mesaj.OkunduMu)
+                                            {
+                                                <a href="/Admin/MesajOkundu/@mesaj.Id" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+                                                    <i class="fa-solid fa-check-double me-2"></i>Okundu Olarak İşaretle
+                                                </a>
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

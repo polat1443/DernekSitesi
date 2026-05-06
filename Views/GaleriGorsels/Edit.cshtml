@@ -1,0 +1,73 @@
+﻿@model DernekSitesi.Models.GaleriGorsel
+@{
+    ViewData["Title"] = "Albümü Düzenle";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card border-0 shadow-lg rounded-5 mx-auto" style="max-width: 800px;">
+        <div class="card-header text-white p-4 text-center" style="background-color: #f39c12;">
+            <h3 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-pen-to-square me-2"></i>Albümü Düzenle</h3>
+        </div>
+        <div class="card-body p-5">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ResimYolu" />
+                <input type="hidden" asp-for="CokluFotograflar" />
+                <input type="hidden" asp-for="EklenmeTarihi" />
+
+                <div class="mb-4">
+                    <label asp-for="Baslik" class="form-label fw-bold">Etkinlik/Albüm Başlığı</label>
+                    <input asp-for="Baslik" class="form-control form-control-lg bg-light" required />
+                </div>
+
+                <div class="mb-4 p-4 rounded-4" style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
+                    <label class="form-label fw-bold text-dark"><i class="fa-solid fa-image text-warning me-2"></i>Kapak Görselini Değiştir</label>
+
+                    @if (!string.IsNullOrEmpty(Model.ResimYolu))
+                    {
+                        <div class="mb-3">
+                            <span class="badge bg-secondary mb-2">Mevcut Kapak:</span><br />
+                            <img src="@Model.ResimYolu" style="height: 100px; border-radius: 10px; object-fit: cover;" class="shadow-sm border" />
+                        </div>
+                    }
+
+                    <input type="file" name="resimDosyasi" class="form-control" accept="image/*" />
+                    <small class="text-muted mt-2 d-block">Yeni bir kapak seçerseniz eskisi değişir. Seçmezseniz eski kapak aynen kalır.</small>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.CokluFotograflar))
+                {
+                    <div class="mb-4 p-4 rounded-4" style="background-color: #fff5f5; border: 1px dashed #ffb3b3;">
+                        <label class="form-label fw-bold text-danger"><i class="fa-solid fa-trash-can me-2"></i>Mevcut Fotoğraflar (Silmek için üzerine tıklayın)</label>
+
+                        <div class="d-flex flex-wrap gap-3 mt-3">
+                            @foreach (var foto in Model.CokluFotograflar.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                <div class="position-relative d-inline-block">
+                                    <input type="checkbox" name="silinecekFotolar" value="@foto" class="btn-check" id="chk-@foto.GetHashCode()">
+                                    <label class="btn btn-outline-danger p-1 rounded-3 shadow-sm border-2" for="chk-@foto.GetHashCode()" style="cursor: pointer;">
+                                        <img src="@foto" style="height: 80px; width: 80px; border-radius: 6px; object-fit: cover;" />
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <small class="text-danger mt-3 d-block fw-bold"><i class="fa-solid fa-circle-exclamation me-1"></i>Kırmızı çerçeve ile seçtiğiniz fotoğraflar "Değişiklikleri Kaydet" butonuna bastığınızda kalıcı olarak silinecektir.</small>
+                    </div>
+                }
+
+                <div class="mb-5 p-4 rounded-4" style="background-color: rgba(155, 89, 182, 0.05); border: 1px dashed #9b59b6;">
+                    <label class="form-label fw-bold" style="color: #9b59b6;"><i class="fa-solid fa-plus-circle me-2"></i>Albüme Yeni Fotoğraflar Ekle</label>
+                    <input type="file" name="cokluDosyalar" class="form-control" accept="image/*" multiple="multiple" />
+                    <small class="text-muted mt-2 d-block fw-bold">Buradan seçeceğiniz yeni fotoğraflar, mevcut albümün üzerine eklenecektir.</small>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">İptal</a>
+                    <button type="submit" class="btn text-dark rounded-pill px-5 fw-bold shadow-sm" style="background-color: #f39c12;"><i class="fa-solid fa-floppy-disk me-2"></i>Değişiklikleri Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

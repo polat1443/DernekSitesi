@@ -1,0 +1,51 @@
+﻿@model DernekSitesi.Models.Toplanti
+@{
+    ViewData["Title"] = "Toplantı Detayı";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header p-5 border-0 text-dark text-center" style="background: linear-gradient(135deg, #fdcb6e 0%, #ffeaa7 100%);">
+                    <i class="fa-regular fa-calendar-check fa-4x mb-3 opacity-75"></i>
+                    <h2 class="mb-3 fw-bold">@Model.Baslik</h2>
+
+                    @if (Model.GelecekToplantiMi)
+                    {
+                        <span class="badge bg-success text-white px-3 py-2 rounded-pill shadow-sm mb-2"><i class="fa-solid fa-bell me-2"></i>Yaklaşan Toplantı</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary text-white px-3 py-2 rounded-pill shadow-sm mb-2"><i class="fa-solid fa-check-double me-2"></i>Tamamlandı</span>
+                    }
+                </div>
+
+                <div class="card-body p-5">
+                    <div class="row g-4 mb-2">
+                        <div class="col-6">
+                            <div class="bg-light p-3 rounded-4 border text-center h-100" style="border-color: #e9ecef !important;">
+                                <i class="fa-regular fa-clock text-warning fa-2x mb-2"></i>
+                                <small class="d-block text-muted fw-bold mb-1">TARİH & SAAT</small>
+                                <h6 class="fw-bold text-dark mb-0">@Model.Tarih.ToString("dd.MM.yyyy")</h6>
+                                <small class="text-muted fw-bold">@Model.Tarih.ToString("HH:mm")</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light p-3 rounded-4 border text-center h-100" style="border-color: #e9ecef !important;">
+                                <i class="fa-solid fa-location-dot text-danger fa-2x mb-2"></i>
+                                <small class="d-block text-muted fw-bold mb-1">KONUM</small>
+                                <h6 class="fw-bold text-dark mb-0 mt-2">@Model.Konum</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light border-0 p-4 d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary fw-bold px-4 rounded-pill"><i class="fa-solid fa-arrow-left me-2"></i>Listeye Dön</a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning text-dark fw-bold px-4 rounded-pill"><i class="fa-solid fa-pen-to-square me-2"></i>Düzenle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

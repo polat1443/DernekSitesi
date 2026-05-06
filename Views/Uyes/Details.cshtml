@@ -1,0 +1,134 @@
+﻿@model DernekSitesi.Models.Uye
+
+@{
+    ViewData["Title"] = "Üye Profili";
+}
+
+<style>
+    .detail-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #00b894 0%, #55efc4 100%);
+        padding: 40px 20px 80px 20px;
+        text-align: center;
+        color: white;
+    }
+
+    .profile-img-container {
+        margin-top: -60px;
+        text-align: center;
+    }
+
+    .profile-img {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border: 5px solid #ffffff;
+        border-radius: 50%;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        background-color: #f8f9fa;
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        color: #b2bec3;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+        color: #2d3436;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container mt-5 mb-5">
+    <div class="detail-card">
+        <div class="profile-header">
+            <h2 class="fw-bold mb-1">Üye Profili</h2>
+            <p class="mb-0 opacity-75">Sistemdeki kayıtlı bilgileri inceliyorsunuz</p>
+        </div>
+
+        <div class="profile-img-container">
+            @if (!string.IsNullOrEmpty(Model.ProfilFotografi))
+            {
+                <img src="@Model.ProfilFotografi" class="profile-img" alt="@Model.AdSoyad" />
+            }
+            else
+            {
+                <div class="profile-img d-inline-flex align-items-center justify-content-center text-muted">
+                    <i class="fa-solid fa-user fa-4x"></i>
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-3 mb-4">
+            <h3 class="fw-bold text-dark mb-1">@Model.AdSoyad</h3>
+            <span class="badge @(Model.AktifMi ? "bg-success" : "bg-secondary") rounded-pill px-3 py-2 shadow-sm mt-2">
+                <i class="fa-solid @(Model.AktifMi ? "fa-check-circle" : "fa-minus-circle") me-1"></i>
+                @(Model.AktifMi ? "Aktif Üye" : "Pasif Üye")
+            </span>
+        </div>
+
+        <div class="p-4 px-md-5">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-4 border">
+                        <div class="info-label"><i class="fa-solid fa-envelope me-2 text-primary"></i>E-Posta</div>
+                        <div class="info-value">@Model.Email</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-4 border">
+                        <div class="info-label"><i class="fa-solid fa-phone me-2 text-success"></i>Telefon</div>
+                        <div class="info-value">@Model.Telefon</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-4 border">
+                        <div class="info-label"><i class="fa-solid fa-briefcase me-2 text-info"></i>Meslek / Uzmanlık</div>
+                        <div class="info-value">@Model.Meslek</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-4 border">
+                        <div class="info-label"><i class="fa-solid fa-droplet me-2 text-danger"></i>Kan Grubu</div>
+                        <div class="info-value">@Model.KanGrubu</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-4 border">
+                        <div class="info-label"><i class="fa-regular fa-calendar-days me-2 text-warning"></i>Kayıt Tarihi</div>
+                        <div class="info-value">@Model.KayitTarihi.ToString("dd MMMM yyyy")</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-4 border">
+                        <div class="info-label"><i class="fa-solid fa-key me-2 text-dark"></i>Giriş Şifresi</div>
+                        <div class="info-value text-muted">@Model.Sifre</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                <a asp-action="Index" class="btn btn-light border fw-bold px-4 py-2 rounded-pill text-dark transition-all">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Listeye Dön
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn fw-bold px-4 py-2 rounded-pill shadow-sm text-white" style="background-color: #00b894;">
+                    <i class="fa-solid fa-pen me-2"></i>Bilgileri Düzenle
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

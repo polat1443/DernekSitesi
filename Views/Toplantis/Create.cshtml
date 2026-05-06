@@ -1,0 +1,147 @@
+﻿@model DernekSitesi.Models.Toplanti
+
+@{
+    ViewData["Title"] = "Yeni Toplantı Planla";
+}
+
+<style>
+    .form-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+        padding: 40px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        padding: 14px 20px;
+        border: 2px solid #f0f2f5;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+        .form-control:focus {
+            border-color: #0984e3;
+            box-shadow: 0 0 0 0.2rem rgba(9, 132, 227, 0.15);
+            background-color: #ffffff;
+        }
+
+    .form-label {
+        font-weight: 700;
+        color: #2d3436;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #00b894 0%, #55efc4 100%);
+        color: white !important;
+        border: none;
+        padding: 14px 35px;
+        border-radius: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+    }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 184, 148, 0.5);
+        }
+
+    .btn-back {
+        background: #f1f2f6;
+        color: #2f3542 !important;
+        border: none;
+        padding: 14px 25px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-back:hover {
+            background: #dfe4ea;
+        }
+
+    .form-check-input {
+        width: 1.5em;
+        height: 1.5em;
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        font-size: 1.1rem;
+        padding-top: 4px;
+        padding-left: 8px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container mt-4 mb-5">
+    <div class="form-card">
+        <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+            <div class="bg-light-warning p-3 rounded-4 me-3" style="background: rgba(253, 203, 110, 0.15); color: #e1b12c;">
+                <i class="fa-solid fa-calendar-plus fa-2x"></i>
+            </div>
+            <div>
+                <h2 class="fw-bold mb-0 text-dark">Yeni Toplantı Planla</h2>
+                <p class="text-muted mb-0">Dernek üyeleri için yeni bir buluşma veya toplantı organize edin.</p>
+            </div>
+        </div>
+
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-bold"></div>
+
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <label asp-for="Baslik" class="form-label"><i class="fa-solid fa-heading text-primary me-2"></i>Toplantı Başlığı</label>
+                    <input asp-for="Baslik" class="form-control" placeholder="Örn: 2026 Olağanüstü Genel Kurul" />
+                    <span asp-validation-for="Baslik" class="text-danger fw-bold" style="font-size: 0.85rem;"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Tarih" class="form-label"><i class="fa-regular fa-clock text-info me-2"></i>Tarih ve Saat</label>
+                    <input asp-for="Tarih" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="Tarih" class="text-danger fw-bold" style="font-size: 0.85rem;"></span>
+                    <small class="text-muted mt-1 d-block"><i class="fa-solid fa-circle-info me-1"></i>Lütfen hem gün hem de saat seçin.</small>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Konum" class="form-label"><i class="fa-solid fa-location-dot text-danger me-2"></i>Toplantı Konumu</label>
+                    <input asp-for="Konum" class="form-control" placeholder="Örn: Iğdır Merkez Dernek Binası" />
+                    <span asp-validation-for="Konum" class="text-danger fw-bold" style="font-size: 0.85rem;"></span>
+                </div>
+
+                <div class="col-md-12 mt-4">
+                    <div class="form-check p-4 rounded-3 border" style="background-color: #f8f9fa;">
+                        <input class="form-check-input ms-1" asp-for="GelecekToplantiMi" checked />
+                        <label class="form-check-label fw-bold text-dark ms-2" asp-for="GelecekToplantiMi">
+                            Bu yaklaşan (gelecek) bir toplantı mı?
+                        </label>
+                        <p class="text-muted ms-5 mb-0" style="font-size: 0.85rem;">Eğer bu kutucuğu işaretlerseniz, bu toplantı Ana Sayfa'da ziyaretçilere duyurulur.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                <a asp-action="Index" class="btn btn-back">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Listeye Dön
+                </a>
+                <button type="submit" class="btn btn-save">
+                    <i class="fa-solid fa-check-double me-2"></i>Toplantıyı Kaydet
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

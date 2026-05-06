@@ -1,0 +1,40 @@
+﻿@model DernekSitesi.Models.YonetimUyesi
+@{
+    ViewData["Title"] = "Yönetici Sil";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card border-0 shadow-lg rounded-5 mx-auto overflow-hidden" style="max-width: 600px;">
+        <div class="card-header p-4 text-center" style="background: linear-gradient(135deg, #ff7675 0%, #d63031 100%); color: white;">
+            <i class="fa-solid fa-triangle-exclamation fa-3x mb-3"></i>
+            <h3 class="fw-bold mb-0">Silme İşlemi Onayı</h3>
+        </div>
+
+        <div class="card-body p-5 text-center bg-light">
+            <h5 class="text-danger fw-bold mb-4">Bu yöneticiyi sistemden silmek istediğinize emin misiniz?</h5>
+
+            <div class="bg-white p-4 rounded-4 shadow-sm border mb-4">
+                @if (!string.IsNullOrEmpty(Model.ResimYolu))
+                {
+                    <img src="@Model.ResimYolu" class="rounded-circle object-fit-cover shadow-sm mb-3 border" style="width: 100px; height: 100px;" alt="@Model.AdSoyad" />
+                }
+                else
+                {
+                    <div class="rounded-circle bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center text-secondary shadow-sm mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2.5rem;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                }
+                <h4 class="fw-bold text-dark mb-1">@Model.AdSoyad</h4>
+                <span class="badge bg-dark rounded-pill px-3 py-2">@Model.Gorev</span>
+            </div>
+
+            <p class="text-muted small"><i class="fa-solid fa-circle-info me-1"></i>Bu işlem geri alınamaz. Yönetici siteden ve veritabanından kalıcı olarak silinecektir.</p>
+
+            <form asp-action="Delete" class="mt-4 d-flex justify-content-center gap-3">
+                <input type="hidden" asp-for="Id" />
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-5 fw-bold">Vazgeç</a>
+                <button type="submit" class="btn btn-danger rounded-pill px-5 fw-bold shadow-sm"><i class="fa-solid fa-trash-can me-2"></i>Evet, Kalıcı Olarak Sil</button>
+            </form>
+        </div>
+    </div>
+</div>
